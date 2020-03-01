@@ -1,7 +1,15 @@
  require('env2')('.env');
 const {Pool}= require('pg');
-const option = {
-    connectionString:process.env.DB_URL,
-    ssl:true
+let dbUrl = '';
+ if (process.env.NODE_ENV == 'development') {
+  dbUrl = process.env.DB_URL;
+} else {
+  dbUrl = process.env.DATABASE_URL;
 }
+if (!dbUrl) throw new Error('No Database URL');
+
+const option = {
+    connectionString: dbUrl,
+    ssl: true,
+  };
 module.exports=new Pool(option)
